@@ -1,0 +1,65 @@
+111 : S -> Polygon2D((800, 300), (550, 280), (400,300), (400, 700), (750,500)) Stronghold;
+12 : Stronghold -> translation(100, 100) Stronghold2;
+
+2 : Stronghold2 -> citywalls(5, 20) Walls Corners Interior DoorWall;
+
+3 : DoorWall -> build_door DoorLeft DoorRight DoorUp DoorDown;
+
+311 : DoorLeft -> show;
+312 : DoorUp -> show;
+313 : DoorRight -> show;
+314 : DoorDown -> epsilon;
+
+31 : NewWalls -> select_faces 
+		WallsTopSide 
+		WallsTopSide
+		WallsTopSideUp 
+		WallsTopSide
+		WallsTopSide
+		WallsTopSide;
+
+34 : WallsTopSide -> show;
+35 : WallsTopSideUp -> extrude(1) CrenelTopVolume;
+
+352 : CrenelTopVolume -> splitEqually(Z, 3) CrenelTopVolume2; 
+3533 : CrenelTopVolume2 -> Crenels : { even };
+3534 : CrenelTopVolume2 -> epsilon : { odd };
+3535 : Crenels -> splitRepeat(X, (2.0,1.0), -1, Begin) Crenels0;
+3536 : Crenels0 ->  show : { even };
+3537 : Crenels0 -> epsilon : { odd };
+
+36 : CrenelTopVolumeFinal -> show;
+
+4 : Corners -> build_rectangle (10, 100, 10) Towers;
+5 : Towers -> splitEqually(Y, 2) TowersPart;
+51 : TowersPart -> TowerTop : { odd };
+52 : TowersPart -> TowerBottom : { even };
+53 : TowerTop -> model(0.2, "models/banana.obj", "textures/banana.jpg");
+54 : TowerBottom -> show("textures/brick_wall.jpg");
+
+6 : Interior -> make_village Dungeon Parcels;
+7 : Dungeon -> build_dungeon (20, 100) Dungeon2;
+777: Dungeon2 -> show;
+7777 : Parcels -> show;
+
+77 : Houses -> build_roof (2.5) Houses2 Roof;
+771 : Roof -> show;
+
+8 : Houses2 -> select_faces 
+	HouseSide
+	HouseDoorSide
+	HouseSide 
+	HouseSide
+	HouseSide
+	HouseSide;
+
+80 : HouseDoorSide -> extrude(1) HouseDoorSideExtruded;
+800 : HouseSide -> show;
+
+81 : HouseDoorSideExtruded -> splitRepeat(X, (3.0), 1, Middle) HouseDoorSideSplit;
+821 : HouseDoorSideSplit -> splitRepeat(Z, (2.0), 1, Begin) HouseDoorSideSplitUp : { odd };
+822 : HouseDoorSideSplit -> show : { even };
+823 : HouseDoorSideSplitUp -> epsilon : { index = 1 };
+824 : HouseDoorSideSplitUp -> show : { index = 0 };
+
+900 : Walls -> make_arrow_slit NewWalls;

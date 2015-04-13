@@ -1,0 +1,93 @@
+0 : S -> SA SB;
+1 : SA -> Polygon2D((110, 120), (100, 150), (150, 200), (200, 200), (100, 100)) Stronghold;
+111 : SB -> Polygon2D((800, 300), (550, 280), (400,300), (400, 700), (750,500)) Stronghold2;
+
+123456 : Stronghold2 -> translation(0,0) Stronghold;
+2 : Stronghold -> citywalls(10, 30) MiddleRampart Corners Interior DoorWall;
+
+3 : DoorWall -> build_door DoorLeft DoorRight DoorUp DoorDown;
+
+311 : DoorLeft -> select_faces
+    DoorLeftSide
+    DoorLeftSide
+    DoorLeftSideUp
+    DoorLeftSide
+    DoorLeftSide
+    DoorLeftSide;
+3111 : DoorLeftSide -> show;
+3112 : DoorLeftSideUp -> extrude(2) CrenelTopVolume;
+
+312 : DoorUp -> select_faces
+    DoorUpSide
+    DoorUpSide
+    DoorUpSideUp
+    DoorUpSide
+    DoorUpSide
+    DoorUpSide;
+3121 : DoorUpSide -> show;
+3122 : DoorUpSideUp -> extrude(2) CrenelTopVolume;
+
+313 : DoorRight -> select_faces
+    DoorRightSide
+    DoorRightSide
+    DoorRightSideUp
+    DoorRightSide
+    DoorRightSide
+    DoorRightSide;
+3131 : DoorRightSide -> show;
+3132 : DoorRightSideUp -> extrude(2) CrenelTopVolume;
+
+314 : DoorDown -> epsilon;
+
+4 : Corners -> build_rectangle (20, 100, 20) Towers : {tower};
+41 : Towers -> select_edges (2) Base EdgeLeft EdgeRight EdgeTop EdgeBottom;
+411 : Base -> show;
+
+412 : EdgeLeft -> extrude(5) EdgeLeftExtruded;
+4121 : EdgeLeftExtruded -> splitEqually(Z, 5) EdgeLeftCrenels;
+4122 : EdgeLeftCrenels -> show : {even};
+
+413 : EdgeRight -> extrude(5) EdgeRightExtruded;
+4131 : EdgeRightExtruded -> splitEqually(Z, 5) EdgeRightCrenels;
+4132 : EdgeRightCrenels -> show : {even};
+
+414 : EdgeTop -> extrude(5) EdgeTopExtruded;
+4141 : EdgeTopExtruded -> splitEqually(X, 5) EdgeTopCrenels;
+4142 : EdgeTopCrenels -> show : {even};
+
+415 : EdgeBottom -> extrude(5) EdgeBottomExtruded;
+4151 : EdgeBottomExtruded -> splitEqually(X, 5) EdgeBottomCrenels;
+4152 : EdgeBottomCrenels -> show : {even};
+
+5 : Interior -> make_village DungeonPos Houses;
+
+6 : DungeonPos -> build_dungeon (20, 100) Dungeon;
+61 : Dungeon -> build_roof(15) DungeonRoof DungeonBase;
+611 : DungeonBase -> split_cylinder (4) DungeonCylinders;
+62 : DungeonCylinders -> show;
+63 : DungeonRoof -> show;
+
+7 : MiddleRampart -> make_arrow_slit NewWalls;
+71 : NewWalls -> select_faces
+    WallsTopSide
+    WallsTopSide
+    WallsTopSideUp
+    WallsTopSide
+    WallsTopSide
+    WallsTopSide;
+
+711 : WallsTopSide -> show;
+712 : WallsTopSideUp -> extrude(2) CrenelTopVolume;
+
+7121 : CrenelTopVolume -> splitEqually(Z, 3) CrenelTopVolume2; 
+7122 : CrenelTopVolume2 -> Crenels : { even };
+7123 : CrenelTopVolume2 -> epsilon : { odd };
+7124 : Crenels -> splitRepeat(X, (2.0,1.0), -1, Begin) Crenels0;
+7125 : Crenels0 ->  show : { even };
+7126 : Crenels0 -> epsilon : { odd };
+
+72 : CrenelTopVolumeFinal -> show;
+
+8 : Houses -> build_roof(3) HousesRoof HousesBase;
+81 : HousesRoof -> show;
+82 : HousesBase -> show;
