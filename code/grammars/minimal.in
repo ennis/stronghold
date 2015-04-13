@@ -1,0 +1,16 @@
+1 : S -> Polygon2D((110, 130), (100, 150), (150, 200), (200, 200), (100, 100)) Stronghold;
+2 : Stronghold -> citywalls(10, 30) Walls Corners Interior DoorWall;
+
+21 : DoorWall -> show;
+31 : Interior -> make_village DungeonPos Houses;
+32 : DungeonPos -> epsilon;
+
+33 : Walls -> show;
+
+4 : Corners -> build_cylinder (5.0..20.0, 10.0..50.0) Towers;
+5 : Towers -> show;
+
+8 : Houses -> build_roof(3) HousesRoof HousesBase;
+81 : HousesRoof -> show;
+82 : HousesBase -> show;
+
